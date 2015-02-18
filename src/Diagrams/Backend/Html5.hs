@@ -75,7 +75,6 @@ module Diagrams.Backend.Html5
   ( Html5(..) -- rendering token
   , B
   , Options(..) -- for rendering options specific to Html5
-
   , renderHtml5
 
   ) where
@@ -90,6 +89,8 @@ import qualified Data.Foldable                as F
 import           Data.Maybe                   (catMaybes, isJust, fromJust, fromMaybe)
 import           Data.NumInstances            ()
 import qualified Data.Text                    as T
+import           Data.Text.Lazy.Builder       (Builder, toLazyText)
+import qualified Data.Text.Lazy.IO            as L
 import           Data.Tree                    (Tree(Node))
 import           Data.Typeable                (Typeable)
 
@@ -139,19 +140,19 @@ instance Monoid (Render Html5 V2 Double) where
 
 instance Backend Html5 V2 Double where
   data Render  Html5 V2 Double = C (RenderM ())
-  type Result  Html5 V2 Double = H.CanvasFree ()
+  type Result  Html5 V2 Double = Builder
   data Options Html5 V2 Double = Html5Options
           { _html5Size   :: SizeSpec V2 Double   -- ^ the requested size
           }
 
   renderRTree :: Html5 -> Options Html5 V2 Double -> RTree Html5 V2 Double Annotation
                         -> Result Html5 V2 Double
-  renderRTree _ _ rt = evalState canvasOutput initialHtml5RenderState
+  renderRTree _ opts rt = H.buildDoc (round w) (round h)
+                        . runRenderM
+                        . runC
+                        . toRender $ rt
     where
-      canvasOutput :: State Html5RenderState (H.CanvasFree ())
-      canvasOutput = do
-        let C r = toRender rt
-        return $ runRenderM $ r
+      V2 w h = specToSize 100 (opts^.size)
 
   adjustDia c opts d = adjustDia2D size c opts (d # reflectY)
 
@@ -416,14 +417,8 @@ instance Renderable (DImage Double External) Html5 where
                                 (fromIntegral w) (fromIntegral h)
     restore
 
-renderHtml5 :: Int -> SizeSpec V2 Double -> QDiagram Html5 V2 Double Any -> IO ()
--- renderHtml5 port sizeSpec d = H.blankHtml5 (fromIntegral port) . flip H.send $ img
---     where
---       img = renderDia Html5 (Html5Options sizeSpec) d
-renderHtml5 = undefined
-
-renderHtml5 :: FilePath -> T.Text -> SizeSpec V2 Double -> QDiagram SVG V2 Double Any -> IO ()
-renderHtml5 outFile prefix spec
-  = BS.writeFile outFile
-  . renderBS
-  . renderDia Html5 (Html5Options spec [] prefix)
+renderHtml5 :: FilePath -> SizeSpec V2 Double -> QDiagram Html5 V2 Double Any -> IO ()
+renderHtml5 outFile  spec
+  = L.writeFile outFile
+  . toLazyText
+  . renderDia Html5 (Html5Options spec)

@@ -61,57 +61,30 @@ module Diagrams.Backend.Html5.CmdLine
        , B
        ) where
 
-import Diagrams.Prelude                hiding (width, height, option, (<>), value)
-import Diagrams.Backend.CmdLine        hiding (width, height)
-import Diagrams.Backend.Html5
-import qualified Graphics.Static        as H
+import           Diagrams.Prelude         hiding (width, height, option, (<>), value, output)
+import           Diagrams.Backend.CmdLine 
+import           Diagrams.Backend.Html5
+import qualified Graphics.Static          as H
 
-import Data.Data
-import Control.Lens                    (makeLenses, (^.))
-import Options.Applicative
+import           Data.List.Split          (splitOn)
+import           Data.Data
+import           Control.Lens             ((^.))
+import           Options.Applicative
 
-data DiaOpts = DiaOpts 
-  { _width  :: Maybe Int -- ^ Final output width of diagram.
-  , _height :: Maybe Int -- ^ Final height of diagram.
-  , _port   :: Int       -- ^ Port on which to start web server.
-  } deriving (Show, Data, Typeable)
-
-makeLenses ''DiaOpts
-
-diaOpts :: Parser DiaOpts
-diaOpts = DiaOpts
-  <$> (optional . option auto)
-      (long "width" <> short 'w'
-    <> metavar "WIDTH"
-    <> help "Desired WIDTH of the output image")
-  <*> (optional . option auto)
-      (long "height" <> short 'h'
-    <> metavar "HEIGHT"
-    <> help "Desired HEIGHT of the output image")
-  <*> option auto
-      (long "port" <> short 'p' 
-    <> value 3000
-    <> metavar "PORT"
-    <> help "Port on which to satrt the web server (default 3000)")
-
-instance Parseable DiaOpts where
-  parser = diaOpts
-  
 defaultMain :: QDiagram Html5 V2 Double Any -> IO ()
 defaultMain = mainWith
     
 instance Mainable (QDiagram Html5 V2 Double Any) where
-  type MainOpts (QDiagram Html5 V2 Double Any) = DiaOpts
+  type MainOpts (QDiagram Html5 V2 Double Any) = DiagramOpts
   mainRender = html5Render
 
-html5Render :: DiaOpts -> QDiagram Html5 V2 Doubl3 Any -> IO ()
+html5Render :: DiagramOpts -> QDiagram Html5 V2 Double Any -> IO ()
 html5Render opts d =
   case splitOn "." (opts^.output) of
     [""] -> putStrLn "No output file given."
     ps | last ps `elem` ["html"] -> do
            let szSpec = fromIntegral <$> mkSizeSpec2D (opts^.width) (opts^.height)
-               build  = renderDia Html5 (Html5Options szSpec [] "") d
-           BS.writeFile (opts^.output) (renderBS build)
+           renderHtml5 (opts^.output) szSpec d
        | otherwise -> putStrLn $ "Unknown file type: " ++ last ps
 
 multiMain :: [(String, QDiagram Html5 V2 Double Any)] -> IO ()
