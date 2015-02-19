@@ -19,6 +19,8 @@ cabal update && cabal install diagrams-html5
 
 A simple example that uses _diagrams-html5_ to draw a the Swirpinski triangle.
 
+![Sierpinksi](http://i.imgur.com/FBaSTYd.png)
+
 ```haskell
 import Diagrams.Prelude
 import Diagrams.Backend.Html5.CmdLine
@@ -45,4 +47,4 @@ This will generate an executable which, when run creates an html file
 containing the HTML5 Canvas code to generate the diagram.
 
 ```
-$ ./Sierpinski -o sierpinski.html -w 750
+$ ./Sierpinski -o sierpinski.html -w 400
