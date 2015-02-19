@@ -21,7 +21,7 @@ A simple example that uses _diagrams-html5_ to draw a square.
 
 ```haskell
 import Diagrams.Prelude
-import Diagrams.Backend.html5.CmdLine
+import Diagrams.Backend.Html5.CmdLine
 
 b1 = square 20 # lw 0.002
 
