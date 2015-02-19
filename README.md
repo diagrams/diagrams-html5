@@ -48,9 +48,11 @@ containing the HTML5 Canvas code to generate the diagram.
 
 ```
 $ ./Sierpinski -o sierpinski.html -w 400
+```
 
 You _must_ pass an output file name with a `.html` extension.
 
+```
 Usage: ./Sierpinksi [-w|--width WIDTH] [-h|--height HEIGHT] [-o|--output OUTPUT] [--loop] [-s|--src ARG] [-i|--interval INTERVAL]
   Command-line diagram generation.
 
