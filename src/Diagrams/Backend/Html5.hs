@@ -18,8 +18,8 @@
 -- License     :  BSD-style (see LICENSE)
 -- Maintainer  :  diagrams-discuss@googlegroups.com
 --
--- A full-featured rendering backend for diagrams using Canvas.
--- Implemented using the blank-canvas platform.
+-- A full-featured rendering backend for diagrams using HTML5 Canvas.
+-- Implemented using the static-canvas package.
 --
 -- To invoke the Html5 backend, you have three options.
 --
@@ -168,7 +168,7 @@ toRender = fromRTree
       fromRTree (Node (RPrim p) _) = render Html5 p
       fromRTree (Node (RStyle sty) rs) = C $ do
         save
-        canvasStyle sty
+        html5Style sty
         accumStyle %= (<> sty)
         runC $ F.foldMap fromRTree rs
         restore
@@ -284,8 +284,8 @@ colorJS c o = H.RGBA (byteRange r) (byteRange g) (byteRange b) (o * realToFrac a
   where 
     (r,g,b,a) = colorToSRGBA . toAlphaColour $  c
 
-canvasTransform :: T2 Double -> RenderM ()
-canvasTransform tr = liftC $ H.transform ax ay bx by tx ty
+html5Transform :: T2 Double -> RenderM ()
+html5Transform tr = liftC $ H.transform ax ay bx by tx ty
   where
     [[ax, ay], [bx, by], [tx, ty]] = (map . map) realToFrac (matrixHomRep tr)
 
@@ -321,8 +321,8 @@ showFontJS wgt slant sz fnt = T.concat [a, " ", b, " ", c, " ", d]
 renderC :: (Renderable a Html5, V a ~ V2, N a ~ Double) => a -> RenderM ()
 renderC a = case (render Html5 a) of C r -> r
 
-canvasStyle :: Style v Double  -> RenderM ()
-canvasStyle s = sequence_
+html5Style :: Style v Double  -> RenderM ()
+html5Style s = sequence_
               . catMaybes $ [ handle clip'
                             , handle lWidth
                             , handle lCap
@@ -330,7 +330,7 @@ canvasStyle s = sequence_
                             ]
   where handle :: (AttributeClass a) => (a -> RenderM ()) -> Maybe (RenderM ())
         handle f = f `fmap` getAttr s
-        clip'    = mapM_ (\p -> canvasPath p >> clip) . op Clip
+        clip'    = mapM_ (\p -> html5Path p >> clip) . op Clip
         lWidth   = liftC . H.lineWidth . getLineWidth
         lCap     = liftC . H.lineCap . fromLineCap . getLineCap
         lJoin    = liftC . H.lineJoin . fromLineJoin . getLineJoin
@@ -355,7 +355,7 @@ instance Renderable (Trail V2 Double) Html5 where
 
 instance Renderable (Path V2 Double) Html5 where
   render _ p = C $ do
-    canvasPath p
+    html5Path p
     f <- getStyleAttrib getFillTexture
     s <- getStyleAttrib getLineTexture
     o <- fromMaybe 1 <$> getStyleAttrib getOpacity
@@ -366,8 +366,8 @@ instance Renderable (Path V2 Double) Html5 where
     restore
 
 -- Add a path to the Html5 context, without stroking or filling it.
-canvasPath :: Path V2 Double -> RenderM ()
-canvasPath (Path trs) = do
+html5Path :: Path V2 Double -> RenderM ()
+html5Path (Path trs) = do
     newPath
     F.mapM_ renderTrail trs
   where
@@ -403,7 +403,7 @@ instance Renderable (Text Double) Html5 where
     liftC $ H.textAlign hAlign
     liftC $ H.font fnt
     fillTexture tx (realToFrac o)
-    canvasTransform (tr <> reflectionY)
+    html5Transform (tr <> reflectionY)
     liftC $ H.fillText (T.pack str) 0 0
     restore
 
@@ -411,7 +411,7 @@ instance Renderable (DImage Double External) Html5 where
   render _ (DImage path w h tr) = C $ do
     let ImageRef file = path
     save
-    canvasTransform (tr <> reflectionY)
+    html5Transform (tr <> reflectionY)
     img <- liftC $ H.newImage (T.pack file)
     liftC $ H.drawImageSize img (fromIntegral (-w) / 2) (fromIntegral (-h) / 2)
                                 (fromIntegral w) (fromIntegral h)
