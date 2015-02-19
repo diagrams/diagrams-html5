@@ -1,8 +1,8 @@
-diagrams-canvas
+diagrams-html5
 ===============
 
-diagrams-canvas is a canvas backend for diagrams based on the blank-canvas
-https://github.com/ku-fpg/blank-canvas package. 
+diagrams-html5 is a HTML5 Canvas backend for diagrams based on the static-canvas
+https://github.com/jeffreyrosenbluth/static-canvas package. 
 Diagrams is a powerful, flexible, declarative domain-specific language for 
 creating vector graphics, using the Haskell programming language.
 It supports most features defined in [diagrams-lib].
@@ -12,16 +12,16 @@ It supports most features defined in [diagrams-lib].
 # Installation
 
 ```
-cabal update && cabal install diagrams-canvas
+cabal update && cabal install diagrams-html5
 ```
 
 # Usage
 
-A simple example that uses _diagrams-canvas_ to draw a square.
+A simple example that uses _diagrams-html5_ to draw a square.
 
 ```haskell
 import Diagrams.Prelude
-import Diagrams.Backend.Canvas.CmdLine
+import Diagrams.Backend.html5.CmdLine
 
 b1 = square 20 # lw 0.002
 
