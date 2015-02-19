@@ -1,11 +1,11 @@
 diagrams-html5
 ===============
 
-diagrams-html5 is a HTML5 Canvas backend for diagrams based on the static-canvas
-https://github.com/jeffreyrosenbluth/static-canvas package. 
-Diagrams is a powerful, flexible, declarative domain-specific language for 
+diagrams-html5 is an HTML5 Canvas backend for **diagrams** based on the static-canvas
+https://github.com/jeffreyrosenbluth/static-canvas package.
+
+**diagrams** is a powerful, flexible, declarative domain-specific language for 
 creating vector graphics, using the Haskell programming language.
-It supports most features defined in [diagrams-lib].
 
 [diagrams-lib]: http://hackage.haskell.org/package/diagrams%2Dlib
 
@@ -17,25 +17,32 @@ cabal update && cabal install diagrams-html5
 
 # Usage
 
-A simple example that uses _diagrams-html5_ to draw a square.
+A simple example that uses _diagrams-html5_ to draw a the Swirpinski triangle.
 
 ```haskell
 import Diagrams.Prelude
-import Diagrams.Backend.html5.CmdLine
+import Diagrams.Backend.Html5.CmdLine
 
-b1 = square 20 # lw 0.002
+sierpinski 1 = eqTriangle 1
+sierpinski n =     s
+                  ===
+               (s ||| s) # centerX
+  where s = sierpinski (n-1)
 
-main = mainWith (pad 1.1 b1)
+example :: Diagram B
+example = sierpinski 7 # center # lw none # fc black
+
+main = mainWith $ example # frame 0.1
 ```
 
-Save this to file named `Square.hs` and compile this program:
+Save this to file named `Sierpinski.hs` and compile this program:
 
 ```
-ghc --make -threaded Square.hs
+ghc Sierpinski.hs
 ```
 
-This will generate an executable which, when run dispays the resulting
-diagrams to http://localhost:3000/
+This will generate an executable which, when run creates an html file
+containing the HTML5 Canvas code to generate the diagram.
 
 ```
-$ ./Square -w 750
+$ ./Sierpinski -o sierpinski.html -w 750
