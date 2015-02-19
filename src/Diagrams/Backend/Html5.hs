@@ -80,7 +80,7 @@ module Diagrams.Backend.Html5
   ) where
 
 import           Control.Lens                 hiding (transform, (#))
-import           Control.Monad.State          (when, State, evalState)
+import           Control.Monad.State          (when)
 import qualified Control.Monad.StateStack     as SS
 import           Control.Monad.Trans          (lift)
 
@@ -118,7 +118,7 @@ type instance V Html5 = V2
 type instance N Html5 = Double
 
 data Html5State = Html5State { _accumStyle :: Style V2 Double
-                               , _csPos :: (Double, Double) }
+                             , _csPos :: (Double, Double) }
 
 makeLenses ''Html5State
 
@@ -173,11 +173,6 @@ toRender = fromRTree
         runC $ F.foldMap fromRTree rs
         restore
       fromRTree (Node _ rs) = F.foldMap fromRTree rs
-
-data Html5RenderState = Html5RenderState
-
-initialHtml5RenderState :: Html5RenderState
-initialHtml5RenderState = Html5RenderState
 
 getSize :: Options Html5 V2 Double -> SizeSpec V2 Double
 getSize (Html5Options {_html5Size = s}) = s

@@ -64,12 +64,9 @@ module Diagrams.Backend.Html5.CmdLine
 import           Diagrams.Prelude          hiding (width, height, option, (<>), value, output)
 import           Diagrams.Backend.CmdLine 
 import           Diagrams.Backend.Html5
-import qualified Graphics.Static           as H
 
 import           Data.List.Split           (splitOn)
-import           Data.Data
 import           Control.Lens              ((^.))
-import           Options.Applicative
 
 defaultMain :: QDiagram Html5 V2 Double Any -> IO ()
 defaultMain = mainWith
