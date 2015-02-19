@@ -17,7 +17,7 @@ cabal update && cabal install diagrams-html5
 
 # Usage
 
-A simple example that uses _diagrams-html5_ to draw a the Swirpinski triangle.
+A simple example that uses _diagrams-html5_ to draw a the Sierpinski triangle.
 
 ![Sierpinksi](http://i.imgur.com/FBaSTYd.png)
 
