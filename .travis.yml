@@ -2,13 +2,11 @@ language: haskell
 
 env:
   matrix:
-    - HPVER=2012.4.0.0
-    - HPVER=2013.2.0.0
-    - GHCVER=7.6.3
-    - GHCVER=7.8.4
-    - GHCVER=head
+    - HPVER=2014.2.0.0 CABALVER=1.18
+    - GHCVER=7.8.4 CABALVER=1.18
+    - GHCVER=7.10.1 CABALVER=1.22
+    - GHCVER=head CABALVER=head
   global:
-    - CABALVER=1.18
     - HEAD_DEPS="diagrams-core diagrams-lib diagrams-solve"
 
 matrix:
