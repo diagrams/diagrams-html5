@@ -77,6 +77,11 @@ module Diagrams.Backend.Html5
   , Options(..) -- for rendering options specific to Html5
   , renderHtml5
 
+  -- * Lenses
+  , size
+  , canvasId
+  , standalone
+
   ) where
 
 import           Control.Lens                 hiding (transform, (#))
@@ -142,17 +147,21 @@ instance Backend Html5 V2 Double where
   data Render  Html5 V2 Double = C (RenderM ())
   type Result  Html5 V2 Double = Builder
   data Options Html5 V2 Double = Html5Options
-          { _html5Size   :: SizeSpec V2 Double   -- ^ the requested size
+          { _html5Size  :: SizeSpec V2 Double   -- ^ the requested size
+          , _standalone :: Bool
+          , _canvasId   :: String
           }
 
   renderRTree :: Html5 -> Options Html5 V2 Double -> RTree Html5 V2 Double Annotation
                         -> Result Html5 V2 Double
-  renderRTree _ opts rt = H.buildDoc (round w) (round h)
+  renderRTree _ opts rt = buildF (round w) (round h)
                         . runRenderM
                         . runC
                         . toRender $ rt
     where
       V2 w h = specToSize 100 (opts^.size)
+      buildF | opts^.standalone = H.buildDoc
+             | otherwise        = \w h -> H.buildScript' w h (opts^.canvasId.to T.pack)
 
   adjustDia c opts d = adjustDia2D size c opts (d # reflectY)
 
@@ -161,7 +170,7 @@ runC (C r) = r
 
 toRender :: RTree Html5 V2 Double Annotation -> Render Html5 V2 Double
 toRender = fromRTree
-  . Node (RStyle (mempty # recommendFillColor (transparent :: AlphaColour Double)))
+  . Node (RStyle (mempty # recommendFillColor transparent))
   . (:[])
   . splitTextureFills
     where
@@ -174,14 +183,22 @@ toRender = fromRTree
         restore
       fromRTree (Node _ rs) = F.foldMap fromRTree rs
 
-getSize :: Options Html5 V2 Double -> SizeSpec V2 Double
-getSize (Html5Options {_html5Size = s}) = s
+-- lenses --------------------------------------------------------------
 
-setSize :: Options Html5 V2 Double -> (SizeSpec V2 Double) -> Options Html5 V2 Double
-setSize o s = o {_html5Size = s}
+-- | Output size.
+size :: Lens' (Options Html5 V2 Double) (SizeSpec V2 Double)
+size = lens _html5Size $ \o i -> o { _html5Size = i }
 
-size :: Lens' (Options Html5 V2 Double)(SizeSpec V2 Double)
-size = lens getSize setSize
+-- | \"id\" for the @<canvas>@ element (prepended to \"StaticCanvas\").
+--   Only applies to non-'standalone' diagrams.
+canvasId :: Lens' (Options Html5 V2 Double) String
+canvasId = lens _canvasId $ \o i -> o { _canvasId = i }
+
+-- | Should the output be a standalone html file. Otherwise the output
+--   is a @<canvas>@ element followed by a @<script>@ calling the
+--   canvas.
+standalone :: Lens' (Options Html5 V2 Double) Bool
+standalone = lens _standalone $ \o i -> o { _standalone = i }
 
 move :: Double -> Double -> RenderM ()
 move x y = do csPos .= (x, y)
@@ -276,7 +293,7 @@ addStop g (f, c) = H.addColorStop f c g
 
 colorJS :: (Color c) => c -> Double  -> H.Color
 colorJS c o = H.RGBA (byteRange r) (byteRange g) (byteRange b) (o * realToFrac a)
-  where 
+  where
     (r,g,b,a) = colorToSRGBA . toAlphaColour $  c
 
 html5Transform :: T2 Double -> RenderM ()
@@ -416,4 +433,4 @@ renderHtml5 :: FilePath -> SizeSpec V2 Double -> QDiagram Html5 V2 Double Any ->
 renderHtml5 outFile  spec
   = L.writeFile outFile
   . toLazyText
-  . renderDia Html5 (Html5Options spec)
+  . renderDia Html5 (Html5Options spec True "")
