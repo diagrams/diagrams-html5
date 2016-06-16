@@ -1,8 +1,15 @@
+## [v1.3.0.6](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.6) (2016-??-??)
+
+- allow `base-4.9`
+- allow `data-default-class-0.1`
+
+[Full Changelog](https://github.com/diagrams/diagrams-html5/compare/v1.3.0.5...v1.3.0.6)
+
 ## [v1.3.0.5](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.5) (2016-05-01)
 
 - allow `lens-4.14`
 
-[Full Changelog](https://github.com/diagrams/diagrams-html5/compare/v1.3.0.3...v1.3.0.5)
+[Full Changelog](https://github.com/diagrams/diagrams-html5/compare/v1.3.0.4...v1.3.0.5)
 
 ## [v1.3.0.4](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.4) (2015-09-29)
 
