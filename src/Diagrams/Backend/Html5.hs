@@ -161,7 +161,7 @@ instance Backend Html5 V2 Double where
     where
       V2 w h = specToSize 100 (opts^.size)
       buildF | opts^.standalone = H.buildDoc
-             | otherwise        = \w h -> H.buildScript' w h (opts^.canvasId.to T.pack)
+             | otherwise        = \wd ht -> H.buildScript' wd ht (opts^.canvasId.to T.pack)
 
   adjustDia c opts d = adjustDia2D size c opts (d # reflectY)
 
