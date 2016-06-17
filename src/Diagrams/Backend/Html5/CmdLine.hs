@@ -66,7 +66,6 @@ import           Diagrams.Backend.CmdLine
 import           Diagrams.Backend.Html5
 
 import           Data.List.Split           (splitOn)
-import           Control.Lens              ((^.))
 
 defaultMain :: QDiagram Html5 V2 Double Any -> IO ()
 defaultMain = mainWith
