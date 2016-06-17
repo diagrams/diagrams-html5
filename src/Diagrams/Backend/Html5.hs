@@ -84,7 +84,6 @@ module Diagrams.Backend.Html5
 
   ) where
 
-import           Control.Lens                 hiding (transform, (#))
 import           Control.Monad.State          (when)
 import qualified Control.Monad.StateStack     as SS
 import           Control.Monad.Trans          (lift)
