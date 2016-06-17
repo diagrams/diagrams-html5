@@ -1,4 +1,4 @@
-## [v1.3.0.6](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.6) (2016-??-??)
+## [v1.3.0.6](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.6) (2016-06-17)
 
 - allow `base-4.9`
 - allow `data-default-class-0.1`
