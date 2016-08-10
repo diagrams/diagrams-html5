@@ -1,3 +1,7 @@
+## [v1.4](https://github.com/diagrams/diagrams-html5/tree/v1.4) (XXX)
+
+- No changes, just bump version to 1.4 to coincide with diagrams 1.4 release
+
 ## [v1.3.0.6](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.6) (2016-06-17)
 
 - allow `base-4.9`
