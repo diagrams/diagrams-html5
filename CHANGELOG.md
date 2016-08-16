@@ -1,3 +1,7 @@
+## [v1.3.0.7](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.7) (2016-08-16)
+
+- allow `optparse-applicative-0.13`
+
 ## [v1.3.0.6](https://github.com/diagrams/diagrams-html5/tree/v1.3.0.6) (2016-06-17)
 
 - allow `base-4.9`
