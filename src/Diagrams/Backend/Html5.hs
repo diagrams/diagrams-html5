@@ -320,7 +320,6 @@ showFontJS :: FontWeight -> FontSlant -> Double -> String -> T.Text
 showFontJS wgt slant sz fnt = T.concat [a, " ", b, " ", c, " ", d]
   where
     a = case wgt of
-          FontWeightNormal -> ""
           FontWeightBold   -> "bold"
           _                -> ""
     b = case slant of
