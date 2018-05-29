@@ -138,6 +138,9 @@ liftC = lift
 runRenderM :: RenderM a -> H.CanvasFree a
 runRenderM = flip SS.evalStateStackT def
 
+instance Semigroup (Render Html5 V2 Double) where
+  (<>) = mappend
+
 instance Monoid (Render Html5 V2 Double) where
   mempty  = C $ return ()
   (C c1) `mappend` (C c2) = C (c1 >> c2)
