@@ -1,3 +1,11 @@
+## [v1.4.1](https://github.com/diagrams/diagrams-html5/tree/v1.4.1) (2018-05-30)
+
+- test on GHC 8.4
+- allow `optparse-applicative-0.14`
+- allow `lens-4.16`
+- allow `base-4.11`
+- add `Semigroup (Render Html5 V2 Double)` instance
+
 ## [v1.4](https://github.com/diagrams/diagrams-html5/tree/v1.4) (2016-10-26)
 
 - allow `lens-4.15`
