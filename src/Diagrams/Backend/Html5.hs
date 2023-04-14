@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeOperators         #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances     #-}
@@ -83,8 +84,7 @@ module Diagrams.Backend.Html5
   , standalone
 
   ) where
-
-import           Control.Monad.State          (when)
+import           Control.Monad                (when)
 import qualified Control.Monad.StateStack     as SS
 import           Control.Monad.Trans          (lift)
 
@@ -139,11 +139,10 @@ runRenderM :: RenderM a -> H.CanvasFree a
 runRenderM = flip SS.evalStateStackT def
 
 instance Semigroup (Render Html5 V2 Double) where
-  (<>) = mappend
+  C c1 <> C c2 = C (c1 >> c2)
 
 instance Monoid (Render Html5 V2 Double) where
   mempty  = C $ return ()
-  (C c1) `mappend` (C c2) = C (c1 >> c2)
 
 instance Backend Html5 V2 Double where
   data Render  Html5 V2 Double = C (RenderM ())
