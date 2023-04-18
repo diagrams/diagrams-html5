@@ -13,7 +13,8 @@ Bug-reports:         http://github.com/diagrams/diagrams-html5/issues
 Stability:           Experimental
 Category:            Graphics
 Build-type:          Simple
-Extra-source-files:  README.md, CHANGELOG.md
+Extra-source-files:  README.md
+Extra-doc-files:     CHANGELOG.md
 Tested-with:         GHC ==8.4.4 || ==8.6.5 || ==8.8.4 || ==8.10.7 || ==9.0.2 || ==9.2.4 || ==9.4.1
 Cabal-version:       1.18
 Source-repository head
