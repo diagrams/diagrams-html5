@@ -1,3 +1,16 @@
+## [v1.4.2](https://github.com/diagrams/diagrams-html5/tree/v1.4.2) (2023-04-17)
+
+- Support up to GHC 9.4
+- Bump upper bounds to allow:
+    - `base-4.17`
+    - `mtl-2.3`
+    - `lens-5.2`
+    - `containers-0.6`
+    - `text-2.0`
+    - `statestack-0.3`
+    - `diagrams-core-1.5`
+    - `diagrams-lib-1.5`
+
 ## [v1.4.1](https://github.com/diagrams/diagrams-html5/tree/v1.4.1) (2018-05-30)
 
 - test on GHC 8.4
