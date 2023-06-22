@@ -1,3 +1,8 @@
+## [v1.4.2-r1](https://github.com/diagrams/diagrams-html5/tree/v1.4.2-r1) (2023-06-22)
+
+- Allow `base-4.18` and `optparse-applicative-0.18`
+- Test on GHC 9.6
+
 ## [v1.4.2](https://github.com/diagrams/diagrams-html5/tree/v1.4.2) (2023-04-17)
 
 - Support up to GHC 9.4
